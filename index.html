@@ -46,6 +46,13 @@
     clear: both;
     margin: 1px 0;
   }
+  .chat__error-message {
+    background-color: red;
+    color: white;
+    font-size: 0.8em;
+    padding: 6px 12px;
+    border-radius: 1.3em;
+  }
   .chat__info-message {
     color: #0084ff; /* blue */
     font-size: 0.8em;
@@ -91,8 +98,6 @@
     import {connect, sendChatMessage} from '/js/main.js'
     document.getElementById('join-chat').addEventListener('click', connect)
     document.getElementById('send-button').addEventListener('click', () => {
-      document.getElementById('chat-input').disabled = true
-      document.getElementById('send-button').disabled = true
       sendChatMessage(document.getElementById('chat-input').value)
     })
   </script>

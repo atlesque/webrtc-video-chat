@@ -1,10 +1,15 @@
 import settings from './settings'
 
+const chatInput = document.getElementById('chat-input')
+const chatOutput = document.getElementById('chat-output')
+const sendButton = document.getElementById('send-button')
+const joinChatButton = document.getElementById('join-chat')
+
 let peerConnection
 let socket
 
 function connect () {
-  document.getElementById('join-chat').disabled = true
+  joinChatButton.disabled = true
   log('Connecting to chat server...')
   socket = io(settings.chatServerURL)
   initVideoConnection()
@@ -13,12 +18,11 @@ function connect () {
 }
 
 function log (text, {type = 'info'} = {}) {
-  const chatOutputElement = document.getElementById('chat-output')
   let listItem = document.createElement('li')
   listItem.setAttribute('class', `chat__message chat__${type}-message`)
   listItem.insertAdjacentText('beforeend', text)
-  chatOutputElement.appendChild(listItem)
-  chatOutputElement.scrollTop = chatOutputElement.scrollHeight // Scroll to bottom
+  chatOutput.appendChild(listItem)
+  chatOutput.scrollTop = chatOutput.scrollHeight // Scroll to bottom
 }
 
 function initVideoConnection () {
@@ -33,8 +37,7 @@ function setupSocketBindings (socket) {
     } else {
       log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
     }
-    document.getElementById('send-button').disabled = false
-    document.getElementById('chat-input').disabled = false
+    enableInput(true)
   })
 
   socket.on('roomIsFull', (room) => {
@@ -51,9 +54,12 @@ function setupSocketBindings (socket) {
 
   socket.on('chatMessageSent', (message) => {
     log(message, {type: 'local'})
-    document.getElementById('chat-input').disabled = false
-    document.getElementById('chat-input').value = ''
-    document.getElementById('send-button').disabled = false
+    resetInput()
+  })
+
+  socket.on('errorSendingMessage', (message) => {
+    log(message, {type: 'error'})
+    enableInput(true)
   })
 
   /*socket.on('ready', (room) => {
@@ -63,7 +69,18 @@ function setupSocketBindings (socket) {
 }
 
 function sendChatMessage (message) {
+  enableInput(false)
   socket.emit('chatMessage', message)
+}
+
+function resetInput () {
+  chatInput.value = ''
+  enableInput(true)
+}
+
+function enableInput (enableInput) {
+  chatInput.disabled = !enableInput
+  sendButton.disabled = !enableInput
 }
 
 export { connect, sendChatMessage }

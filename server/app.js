@@ -30,11 +30,15 @@ io.on('connection', (socket) => {
   })
 
   socket.on('chatMessage', (message) => {
-    console.log(`Got message from ${socket.id}: ${message}`)
-    var joinedRooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
-    console.log(joinedRooms)
-    socket.to(joinedRooms).emit('chatMessage', message);
-    socket.emit('chatMessageSent', message)
+    if (message.length <= 0) {
+      socket.emit('errorSendingMessage', 'Error: Cannot send empty message!')
+    } else {
+      console.log(`Got message from ${socket.id}: ${message}`)
+      var joinedRooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
+      console.log(joinedRooms)
+      socket.to(joinedRooms).emit('chatMessage', message);
+      socket.emit('chatMessageSent', message)
+    }
   })
 
   socket.on('startChat', (data) => {
