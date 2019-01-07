@@ -13,9 +13,11 @@ function connect () {
 }
 
 function log (text, {type = 'info'} = {}) {
-  const output = `<li class='chat__message chat__${type}-message'>${text}</li>`
   const chatOutputElement = document.getElementById('chat-output')
-  chatOutputElement.insertAdjacentHTML('beforeend', output)
+  let listItem = document.createElement('li')
+  listItem.setAttribute('class', `chat__message chat__${type}-message`)
+  listItem.insertAdjacentText('beforeend', text)
+  chatOutputElement.appendChild(listItem)
   chatOutputElement.scrollTop = chatOutputElement.scrollHeight // Scroll to bottom
 }
 
