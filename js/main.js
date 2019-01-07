@@ -14,7 +14,9 @@ function connect () {
 
 function log (text, {type = 'info'} = {}) {
   const output = `<li class='chat__message chat__${type}-message'>${text}</li>`
-  document.getElementById('chat-output').insertAdjacentHTML('beforeend', output)
+  const chatOutputElement = document.getElementById('chat-output')
+  chatOutputElement.insertAdjacentHTML('beforeend', output)
+  chatOutputElement.scrollTop = chatOutputElement.scrollHeight // Scroll to bottom
 }
 
 function initVideoConnection () {
