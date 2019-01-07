@@ -4,7 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
   <title>WebRTC Video Chat</title>
-  <style></style>
+  <style>
+  video {
+    border: 1px solid black;
+    background-color: grey;
+  }
+  #videos {
+    margin-bottom: 1em;
+  }
+  #connection-buttons {
+    margin-bottom: 1em;
+  }
+  #chat {
+    border: 1px solid black;
+    height: 300px;
+    max-width: 500px;
+    margin-bottom: 1em;
+  }
+</style>
 </head>
 
 <body>
@@ -13,11 +30,21 @@
     <video id="remote-video" autoplay playsinline></video>
   </div>
 
-  <input type="text" id="room-id-input" autofocus/>
-  <button id="join-button" onclick="initConnection()">JOIN</button>
+  <div id="connection-buttons">
+    <button id="join-chat" onclick='connect()'>Join chat</button>
+    <button id="call-video" disabled>Call with video</button>
+  </div>
 
-  <script src="peer.min.js"></script>
-  <script src="settings.js"></script>
-  <script src="main.js"></script>
+  <div id="chat">
+    <!-- chat output here -->
+  </div>
+
+  <input type="text" id="room-id-input" disabled />
+  <button id="send-button" onclick="sendMessage()" disabled>Send</button>
+
+  <script src="/js/vendor/socket.io.js"></script>
+  <script src="/js/vendor/peer.min.js"></script>
+  <script src="/js/settings.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
