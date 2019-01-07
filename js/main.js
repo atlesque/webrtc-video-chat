@@ -12,8 +12,9 @@ function connect () {
   setupSocketBindings(socket)
 }
 
-function log(text) {
-  document.getElementById('chat-output').insertAdjacentHTML('beforeend', `<li class='chat__text--log'>${text}</li>`)
+function log (text, {type = 'info'} = {}) {
+  const output = `<li class='chat__${type}-message'>${text}</li>`
+  document.getElementById('chat-output').insertAdjacentHTML('beforeend', output)
 }
 
 function initVideoConnection () {
@@ -22,7 +23,7 @@ function initVideoConnection () {
 
 function setupSocketBindings (socket) {
   socket.on('joinedRoom', (room, clientId, numClients) => {
-    var otherClientsCount = numClients - 1
+    const otherClientsCount = numClients - 1
     if (otherClientsCount === 0) {
       log('Connected! You are the first here.')
     } else {
@@ -41,7 +42,7 @@ function setupSocketBindings (socket) {
   })
 
   socket.on('chatMessage', (message) => {
-    log(`Got message: ${message}`)
+    log(message, {type: 'remote'})
   })
 
   socket.on('chatMessageSent', () => {
