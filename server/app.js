@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     var joinedRooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
     console.log(joinedRooms)
     socket.to(joinedRooms).emit('chatMessage', message);
+    socket.emit('chatMessageSent')
   })
 
   socket.on('startChat', (data) => {

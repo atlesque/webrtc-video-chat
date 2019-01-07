@@ -63,7 +63,11 @@
   <script type="module">
     import {connect, sendChatMessage} from '/js/main.js'
     document.getElementById('join-chat').addEventListener('click', connect)
-    document.getElementById('send-button').addEventListener('click', () => {sendChatMessage(document.getElementById('chat-input').value)})
+    document.getElementById('send-button').addEventListener('click', () => {
+      document.getElementById('chat-input').disabled = true
+      document.getElementById('send-button').disabled = true
+      sendChatMessage(document.getElementById('chat-input').value)
+    })
   </script>
 </body>
 </html>

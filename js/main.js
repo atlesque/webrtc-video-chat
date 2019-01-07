@@ -44,6 +44,12 @@ function setupSocketBindings (socket) {
     log(`Got message: ${message}`)
   })
 
+  socket.on('chatMessageSent', () => {
+    document.getElementById('chat-input').disabled = false
+    document.getElementById('chat-input').value = ''
+    document.getElementById('send-button').disabled = false
+  })
+
   /*socket.on('ready', (room) => {
     log('two clients connected, ready for chat!')
     socket.emit('startChat', {room: room, peerId: peerConnection.id})
