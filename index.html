@@ -16,10 +16,21 @@
     margin-bottom: 1em;
   }
   #chat {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+  }
+  #chat-output {
     border: 1px solid black;
     height: 300px;
-    max-width: 500px;
-    margin-bottom: 1em;
+    margin: 0 0 1em 0;
+  }
+  #chat-input-wrapper {
+    display: inline-flex;
+  }
+  #chat-input {
+    flex: 1;
+    margin-right: 1em;
   }
 </style>
 </head>
@@ -35,20 +46,24 @@
     <button id="call-video" disabled>Call with video</button>
   </div>
 
-  <ul id="chat">
-    <!-- chat output here -->
-  </ul>
-
-  <input type="text" id="room-id-input" disabled />
-  <button id="send-button" onclick="sendMessage()" disabled>Send</button>
+  <div id="chat">
+    <ul id="chat-output">
+      <!-- chat output here -->
+    </ul>
+    <div id="chat-input-wrapper">
+      <input type="text" id="chat-input" disabled />
+      <button id="send-button" disabled>Send</button>
+    </div>
+  </div>
 
   <script src="/js/vendor/socket.io.js"></script>
   <script src="/js/vendor/peer.min.js"></script>
   <script type="module" src="/js/settings.js"></script>
   <script type="module" src="/js/main.js"></script>
   <script type="module">
-    import {connect} from '/js/main.js'
+    import {connect, sendChatMessage} from '/js/main.js'
     document.getElementById('join-chat').addEventListener('click', connect)
+    document.getElementById('send-button').addEventListener('click', () => {sendChatMessage(document.getElementById('chat-input').value)})
   </script>
 </body>
 </html>

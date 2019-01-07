@@ -29,6 +29,13 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('chatMessage', (message) => {
+    console.log(`Got message from ${socket.id}: ${message}`)
+    var joinedRooms = Object.keys(socket.rooms).filter(item => item!=socket.id);
+    console.log(joinedRooms)
+    socket.to(joinedRooms).emit('chatMessage', message);
+  })
+
   socket.on('startChat', (data) => {
     io.sockets.in(data.room).emit('sharePeerId', data.peerId)
   })

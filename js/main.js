@@ -12,36 +12,46 @@ function connect () {
   setupSocketBindings(socket)
 }
 
+function log(text) {
+  document.getElementById('chat-output').insertAdjacentHTML('beforeend', `<li class='chat__text--log'>${text}</li>`)
+}
+
 function initVideoConnection () {
   peerConnection = new Peer(settings.ICEConfig)
 }
 
 function setupSocketBindings (socket) {
-  socket.on('joinedRoom', function (room, clientId, numClients) {
+  socket.on('joinedRoom', (room, clientId, numClients) => {
     var otherClientsCount = numClients - 1
     if (otherClientsCount === 0) {
       log('Connected! You are the first here.')
     } else {
       log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
     }
+    document.getElementById('send-button').disabled = false
+    document.getElementById('chat-input').disabled = false
   })
 
-  socket.on('roomIsFull', function (room) {
+  socket.on('roomIsFull', (room) => {
     log('Cannot connect: the room is full.')
   })
 
-  socket.on('clientJoined', function (room, totalClients) {
+  socket.on('clientJoined', (room, totalClients) => {
     log(`Another client joined the room. Total clients connected: ${totalClients}`)
   })
 
-  /*socket.on('ready', function (room) {
+  socket.on('chatMessage', (message) => {
+    log(`Got message: ${message}`)
+  })
+
+  /*socket.on('ready', (room) => {
     log('two clients connected, ready for chat!')
     socket.emit('startChat', {room: room, peerId: peerConnection.id})
   })*/
 }
 
-function log(text) {
-  document.getElementById('chat').insertAdjacentHTML('beforeend', `<li class='chat__text--log'>${text}</li>`)
+function sendChatMessage (message) {
+  socket.emit('chatMessage', message)
 }
 
-export { connect, initVideoConnection }
+export { connect, sendChatMessage }
