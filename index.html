@@ -31,7 +31,7 @@
   </div>
 
   <div id="connection-buttons">
-    <button id="join-chat" onclick='connect()'>Join chat</button>
+    <button id="join-chat">Join chat</button>
     <button id="call-video" disabled>Call with video</button>
   </div>
 
@@ -44,7 +44,11 @@
 
   <script src="/js/vendor/socket.io.js"></script>
   <script src="/js/vendor/peer.min.js"></script>
-  <script src="/js/settings.js"></script>
-  <script src="/js/main.js"></script>
+  <script type="module" src="/js/settings.js"></script>
+  <script type="module" src="/js/main.js"></script>
+  <script type="module">
+    import {connect} from '/js/main.js'
+    document.getElementById('join-chat').addEventListener('click', connect)
+  </script>
 </body>
 </html>
