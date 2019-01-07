@@ -17,22 +17,17 @@ function initVideoConnection () {
 }
 
 function setupSocketBindings (socket) {
-  socket.on('joinedEmptyRoom', function (room, clientId) {
-    log('Connected! You are the first here.')
+  socket.on('joinedRoom', function (room, clientId, numClients) {
+    var otherClientsCount = numClients - 1
+    if (otherClientsCount === 0) {
+      log('Connected! You are the first here.')
+    } else {
+      log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
+    }
   })
 
   socket.on('roomIsFull', function (room) {
     log('Cannot connect: the room is full.')
-  })
-
-  socket.on('joinedOccupiedRoom', function (room, clientId, numClients) {
-    var otherClientsCount = numClients - 1
-    log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
-  })
-
-  socket.on('log', function (array) {
-    console.log.apply(console, array)
-    log(array)
   })
 
   socket.on('clientJoined', function (room, totalClients) {

@@ -16,12 +16,12 @@ io.on('connection', (socket) => {
     if (totalClients === 1) {
       socket.join(room)
       console.log('Client ID ' + socket.id + ' created room ' + room)
-      socket.emit('joinedEmptyRoom', room, socket.id)
+      socket.emit('joinedRoom', room, socket.id, totalClients)
     } else if (totalClients === 2) {
       console.log('Client ID ' + socket.id + ' joined room ' + room)
       io.sockets.in(room).emit('clientJoined', room, totalClients)
       socket.join(room)
-      socket.emit('joinedOccupiedRoom', room, socket.id, totalClients)
+      socket.emit('joinedRoom', room, socket.id, totalClients)
       io.sockets.in(room).emit('ready', room)
       // console.log(clientsInRoom)
     } else { // max two clients
