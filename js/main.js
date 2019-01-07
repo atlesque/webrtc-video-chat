@@ -13,7 +13,7 @@ function connect () {
 }
 
 function log (text, {type = 'info'} = {}) {
-  const output = `<li class='chat__${type}-message'>${text}</li>`
+  const output = `<li class='chat__message chat__${type}-message'>${text}</li>`
   document.getElementById('chat-output').insertAdjacentHTML('beforeend', output)
 }
 
@@ -45,7 +45,8 @@ function setupSocketBindings (socket) {
     log(message, {type: 'remote'})
   })
 
-  socket.on('chatMessageSent', () => {
+  socket.on('chatMessageSent', (message) => {
+    log(message, {type: 'local'})
     document.getElementById('chat-input').disabled = false
     document.getElementById('chat-input').value = ''
     document.getElementById('send-button').disabled = false
