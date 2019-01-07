@@ -17,7 +17,7 @@ function initVideoConnection () {
 }
 
 function setupSocketBindings (socket) {
-  socket.on('joinedRoomAsFirst', function (room, clientId) {
+  socket.on('joinedEmptyRoom', function (room, clientId) {
     log('Connected! You are the first here.')
   })
 
@@ -25,13 +25,18 @@ function setupSocketBindings (socket) {
     log('Cannot connect: the room is full.')
   })
 
-  socket.on('joined', function (room, clientId) {
-    log('Connected! Your partner is already in the chatroom.')
+  socket.on('joinedOccupiedRoom', function (room, clientId, numClients) {
+    var otherClientsCount = numClients - 1
+    log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
   })
 
   socket.on('log', function (array) {
     console.log.apply(console, array)
     log(array)
+  })
+
+  socket.on('clientJoined', function (room, totalClients) {
+    log(`Another client joined the room. Total clients connected: ${totalClients}`)
   })
 
   /*socket.on('ready', function (room) {
