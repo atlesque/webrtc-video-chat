@@ -100,6 +100,11 @@
     document.getElementById('send-button').addEventListener('click', () => {
       sendChatMessage(document.getElementById('chat-input').value)
     })
+    document.getElementById('chat-input-wrapper').addEventListener('keydown', (e) => {
+      if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) { // CTRL + Enter
+        sendChatMessage(document.getElementById('chat-input').value)
+      }
+    })
   </script>
 </body>
 </html>
