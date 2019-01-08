@@ -2,7 +2,7 @@
 ## Info
 This is a minimalist text and video chat implemented with vanilla JS, WebRTC and Socket.IO.
 
-I decided for a lightweight approach in order to test the WebRTC technology with as the smallest overhead.
+I decided for a lightweight approach in order to test the WebRTC technology with the smallest overhead.
 
 ## Usage
 - Pull the code
