@@ -76,7 +76,8 @@
   </div>
 
   <div id="connection-buttons">
-    <button id="join-chat">Join chat</button>
+    <input type="text" id="nickname-input" placeholder="Enter your name" maxlength="20" />
+    <button id="join-chat" disabled>Join chat</button>
     <button id="call-video" disabled>Call with video</button>
   </div>
 
@@ -96,7 +97,7 @@
   <script type="module" src="/js/main.js"></script>
   <script type="module">
     import {connect, sendChatMessage} from '/js/main.js'
-    document.getElementById('join-chat').addEventListener('click', connect)
+    document.getElementById('join-chat').addEventListener('click', () => { connect({nickname: document.getElementById('nickname-input').value}) })
     document.getElementById('send-button').addEventListener('click', () => {
       sendChatMessage(document.getElementById('chat-input').value)
     })
@@ -105,6 +106,12 @@
         sendChatMessage(document.getElementById('chat-input').value)
       }
     })
+    var eventTypeList =  ['keyup', 'keydown']
+    for (event of eventTypeList) {
+      document.getElementById('nickname-input').addEventListener(event, () => {
+        document.getElementById('join-chat').disabled = document.getElementById('nickname-input').value.length <= 0
+      })
+    }
   </script>
 </body>
 </html>

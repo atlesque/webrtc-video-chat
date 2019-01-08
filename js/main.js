@@ -4,16 +4,17 @@ const chatInput = document.getElementById('chat-input')
 const chatOutput = document.getElementById('chat-output')
 const sendButton = document.getElementById('send-button')
 const joinChatButton = document.getElementById('join-chat')
+const nicknameInput = document.getElementById('nickname-input')
 
 let peerConnection
 let socket
 
-function connect () {
+function connect (options) {
   joinChatButton.disabled = true
   log('Connecting to chat server...')
   socket = io(settings.chatServerURL)
   initVideoConnection()
-  socket.emit('create or join', { guid: 'test-guid', peerId: peerConnection.id })
+  socket.emit('create or join', { guid: 'test-guid', peerId: peerConnection.id, nickname: options.nickname })
   setupSocketBindings(socket)
 }
 
@@ -38,6 +39,7 @@ function setupSocketBindings (socket) {
       log(`Connected! There ${otherClientsCount === 1 ? 'is' : 'are'} ${otherClientsCount} other client${otherClientsCount === 1 ? '' : 's'} in the room.`)
     }
     enableInput(true)
+    nicknameInput.disabled = true
   })
 
   socket.on('roomIsFull', (room) => {
@@ -60,6 +62,12 @@ function setupSocketBindings (socket) {
   socket.on('errorSendingMessage', (message) => {
     log(message, {type: 'error'})
     enableInput(true)
+  })
+
+  socket.on('nicknameError', (message) => {
+    log(message, {type: 'error'})
+    joinChatButton.disabled = false
+    nicknameInput.focus()
   })
 
   /*socket.on('ready', (room) => {

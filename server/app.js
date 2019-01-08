@@ -3,8 +3,14 @@ var server = require('http').createServer(app)
 var io = require('socket.io')(server)
 
 io.on('connection', (socket) => {
-  socket.on('create or join', (data) => {
-    const room = data.guid
+  socket.on('create or join', (options) => {
+    try {
+      validateNickname(options.nickname)      
+    } catch (err) {
+      return socket.emit('nicknameError', `Error: ${err}`)
+    }
+
+    const room = options.guid
 
     console.log('Received request to create or join room ' + room)
 
@@ -45,5 +51,11 @@ io.on('connection', (socket) => {
     io.sockets.in(data.room).emit('sharePeerId', data.peerId)
   })
 })
+
+function validateNickname (name) {
+  console.log(name)
+  if (!name || name.length < 1) throw 'Nickname must be at least 1 character long'
+  if (/^([a-z])\w+$/gi.test(name) === false) throw 'Nickname may only contain alphanumeric characters'
+}
 
 server.listen(5000)
