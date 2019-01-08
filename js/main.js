@@ -81,6 +81,7 @@ function resetInput () {
 function enableInput (enableInput) {
   chatInput.disabled = !enableInput
   sendButton.disabled = !enableInput
+  if (enableInput === true) chatInput.focus()
 }
 
 export { connect, sendChatMessage }
