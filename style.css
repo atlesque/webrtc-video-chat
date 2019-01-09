@@ -52,6 +52,7 @@ video {
   float: left;
   clear: both;
   margin: 1px 0;
+  white-space: pre-line;
 }
 .chat__error-message {
   background-color: red;
