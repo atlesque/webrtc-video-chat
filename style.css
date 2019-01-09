@@ -55,6 +55,15 @@ video {
   margin: 1px 0;
   white-space: pre-line;
 }
+.chat__message-avatar {
+  display: inline-block;
+  color: #b3b3b3;
+  font-weight: 700;
+  padding: 6px 12px;
+  margin-right: 5px;
+  border-radius: 1.3em;
+  border: 1px solid #b3b3b3;
+}
 .chat__error-message {
   background-color: red;
   color: white;
@@ -71,9 +80,11 @@ video {
   color: white;
   float: right;
 }
-.chat__remote-message {
+.chat__remote-message .chat__message-text {
   background-color: #f1f0f0; /* grey */
   color: black;
+  padding: 6px 12px;
+  border-radius: 1.3em;
 }
 
 .row {

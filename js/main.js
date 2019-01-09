@@ -10,6 +10,7 @@ const partnerStatus = document.getElementById('partner-status')
 let peerConnection
 let socket
 let ownNickname
+let partnerName
 
 function connect (options) {
   joinChatButton.disabled = true
@@ -24,7 +25,18 @@ function connect (options) {
 function log (text, {type = 'info'} = {}) {
   let listItem = document.createElement('li')
   listItem.setAttribute('class', `chat__message chat__${type}-message`)
-  listItem.insertAdjacentText('beforeend', text)
+  if (type === 'remote') {
+    let divItem = document.createElement('div')
+    divItem.setAttribute('class', 'chat__message-avatar')
+    let spanItem = document.createElement('span')
+    spanItem.insertAdjacentText('beforeend', partnerName.substring(0, 1))
+    divItem.appendChild(spanItem)
+    listItem.appendChild(divItem)
+  }
+  let spanItem = document.createElement('span')
+  spanItem.setAttribute('class', 'chat__message-text')
+  spanItem.insertAdjacentText('beforeend', text)
+  listItem.appendChild(spanItem)
   chatOutput.appendChild(listItem)
   chatOutput.scrollTop = chatOutput.scrollHeight // Scroll to bottom
 }
@@ -54,6 +66,7 @@ function setupSocketBindings (socket) {
     // log(`Nicknames: ${nicknameList}`)
     if(clientName !== ownNickname) log(`${clientName} connected.`)
     const partnerList = clientList.filter((name) => name != ownNickname)
+    partnerName = partnerList[0]
     partnerStatus.innerHTML = partnerList.length > 0 ? partnerList : 'offline'
   })
 
@@ -80,6 +93,7 @@ function setupSocketBindings (socket) {
   socket.on('clientLeft', (clientName, clientList) => {
     log(`${clientName} disconnected.`)
     const partnerList = clientList.filter((name) => name != ownNickname)
+    partnerName = partnerList[0]
     partnerStatus.innerHTML = partnerList.length > 0 ? partnerList : 'offline'
   })
 
