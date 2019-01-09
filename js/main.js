@@ -5,9 +5,11 @@ const chatOutput = document.getElementById('chat-output')
 const sendButton = document.getElementById('send-button')
 const joinChatButton = document.getElementById('join-chat')
 const nicknameInput = document.getElementById('nickname-input')
+const partnerStatus = document.getElementById('partner-status')
 
 let peerConnection
 let socket
+let ownNickname
 
 function connect (options) {
   joinChatButton.disabled = true
@@ -15,6 +17,7 @@ function connect (options) {
   socket = io(settings.chatServerURL)
   initVideoConnection()
   socket.emit('create or join', { guid: 'test-guid', peerId: peerConnection.id, nickname: options.nickname })
+  ownNickname = options.nickname
   setupSocketBindings(socket)
 }
 
@@ -46,8 +49,12 @@ function setupSocketBindings (socket) {
     log('Cannot connect: the room is full.')
   })
 
-  socket.on('clientJoined', (room, totalClients) => {
-    log(`Another client joined the room. Total clients connected: ${totalClients}`)
+  socket.on('clientJoined', (clientName, clientList) => {
+    // log(`Another client joined the room. Total clients connected: ${totalClients}`)
+    // log(`Nicknames: ${nicknameList}`)
+    if(clientName !== ownNickname) log(`${clientName} connected.`)
+    const partnerList = clientList.filter((name) => name != ownNickname)
+    partnerStatus.innerHTML = partnerList.length > 0 ? partnerList : 'offline'
   })
 
   socket.on('chatMessage', (message) => {
@@ -68,6 +75,12 @@ function setupSocketBindings (socket) {
     log(message, {type: 'error'})
     joinChatButton.disabled = false
     nicknameInput.focus()
+  })
+
+  socket.on('clientLeft', (clientName, clientList) => {
+    log(`${clientName} disconnected.`)
+    const partnerList = clientList.filter((name) => name != ownNickname)
+    partnerStatus.innerHTML = partnerList.length > 0 ? partnerList : 'offline'
   })
 
   /*socket.on('ready', (room) => {

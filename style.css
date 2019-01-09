@@ -24,6 +24,7 @@ video {
 }
 #connection-buttons {
   margin-bottom: 1em;
+  align-self: flex-start;
 }
 #chat {
   display: flex;
@@ -73,4 +74,18 @@ video {
 .chat__remote-message {
   background-color: #f1f0f0; /* grey */
   color: black;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.row > * {
+  flex: 1;
+}
+
+.partner-status-wrapper {
+  text-align: right;
 }

@@ -17,10 +17,16 @@
     </div>
   </div>
 
-  <div id="connection-buttons">
-    <input type="text" id="nickname-input" placeholder="Enter your name" maxlength="20" />
-    <button id="join-chat" disabled>Join chat</button>
-    <button id="call-video" disabled>Call with video</button>
+  <div class="row">
+    <div id="connection-buttons">
+      <input type="text" id="nickname-input" placeholder="Enter your name" maxlength="20" />
+      <button id="join-chat" disabled>Join chat</button>
+      <button id="call-video" disabled>Call with video</button>
+    </div>
+
+    <div class="partner-status-wrapper">
+      Partner: <span id="partner-status">offline</span>
+    </div>
   </div>
 
   <div id="chat">
